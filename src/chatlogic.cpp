@@ -17,11 +17,12 @@ ChatLogic::ChatLogic()
     //// STUDENT CODE
     ////
 
+    /* STUDNET: a local copy of chatbot is created on the stack in the LoadAnswerGraphFromFile function
     // create instance of chatbot
     _chatBot = new ChatBot("../images/chatbot.png");
 
     // add pointer to chatlogic so that chatbot answers can be passed on to the GUI
-    _chatBot->SetChatLogicHandle(this);
+    _chatBot->SetChatLogicHandle(this);*/
 
     ////
     //// EOF STUDENT CODE
@@ -33,7 +34,8 @@ ChatLogic::~ChatLogic()
     ////
 
     // delete chatbot instance
-    delete _chatBot;
+    //No need to delete the chatbot either
+    //delete _chatBot;
 
     // delete all nodes
     //No need for explicitly deallocating the head memory used by the _nodes vector since now it has been implemented as a vector of unique pointers
@@ -165,7 +167,9 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
                             std::unique_ptr<GraphEdge> edge = std::make_unique<GraphEdge>(id);
                             edge->SetChildNode((*childNode).get());
                             edge->SetParentNode((*parentNode).get());
-                            _edges.push_back(edge);
+                            
+                            //There is no need for the _edges member variables since as soon as the the edge type is parsed it would be assigned to the child node
+                            //_edges.push_back(*edge);
 
                             // find all keywords for current node
                             AddAllTokensToElement("KEYWORD", tokens, *edge);
@@ -198,6 +202,9 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     //// STUDENT CODE
     ////
 
+    //STUDENT: Creating a local chatbot object
+    ChatBot localCB("../images/chatbot.png");
+
     // identify root node
     GraphNode *rootNode = nullptr;
     for (auto it = std::begin(_nodes); it != std::end(_nodes); ++it)
@@ -218,8 +225,14 @@ void ChatLogic::LoadAnswerGraphFromFile(std::string filename)
     }
 
     // add chatbot to graph root node
-    _chatBot->SetRootNode(rootNode);
-    rootNode->MoveChatbotHere(_chatBot);
+    //Setting the root node in the local chatbot created in line 204
+    localCB.SetRootNode(rootNode);
+
+    //Assigning the chatlogic handle in the local chatbot to this chatlogic object
+    localCB.SetChatLogicHandle(this);
+
+    //moving the local chatbot created in line 204 to the root node
+    rootNode->MoveChatbotHere(std::move(localCB));
     
     ////
     //// EOF STUDENT CODE

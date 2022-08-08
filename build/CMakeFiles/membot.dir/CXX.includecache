@@ -33,6 +33,8 @@ string
 -
 chatbot.h
 /home/workspace/CppND-Memory-Management-Chatbot/src/chatbot.h
+memory
+/home/workspace/CppND-Memory-Management-Chatbot/src/memory
 
 /usr/include/wx-3.0/wx/afterstd.h
 wx/msw/winundef.h
